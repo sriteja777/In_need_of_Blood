@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, url_for, redirect, request, session, send_file, send_from_directory, jsonify
+from flask import Flask, render_template, flash, url_for, redirect, request, session, send_file, send_from_directory, jsonify, Response, make_response
 from content_management import *
 from passlib.hash import sha256_crypt
 from wtforms import Form, BooleanField, PasswordField, validators, StringField, TextAreaField, DateField
@@ -145,7 +145,6 @@ def dashboard():
                                bloodgroups_lis=bloodgroups_lis, form=form, noti_names=zip(notifications, names))
 
 
-
 @app.route('/make_a_request/', methods=['GET', 'POST'])
 def make_request():
     models.make_blood_request(request, flash, session)
@@ -154,7 +153,10 @@ def make_request():
 
 @app.route('/return-file/')
 def return_file():
-    return send_file('/home/sriteja/PycharmProjects/Blood Bank/logo.png', attachment_filename='logo.png')
+    resp = make_response(send_file('/home/sriteja/qr-scanner/qr-scanner.min.js', attachment_filename='logo.js'))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    # return send_file('/home/sriteja/PycharmProjects/Blood Bank/logo.png', attachment_filename='logo.png')
+    return resp
 
 
 @app.route('/filedown/')
